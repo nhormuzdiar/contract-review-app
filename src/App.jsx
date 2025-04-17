@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 
 function App() {
@@ -63,29 +64,32 @@ function App() {
 
   return (
     <div className="container">
-      <h1>📄 Contract Review Assistant</h1>
-      <p>Upload a contract and let AI suggest redlines that protect your small business.</p>
-      <div className="image-stack">
-        <img src="/notepad.png" alt="Notepad" className="notepad" />
-<img src="/robot-with-pen-magnifying-glass.png" alt="Robot with tools" className="robot" />
-</div>
+      <h1>📝 Contract Companion</h1>
+      <p>Upload a contract and let your AI companion highlight redlines to protect your small business.</p>
+
+      <div className="hero-container">
+        <img src="/notepad.png" alt="Notepad" className="hero" />
+        <img src="/robot-with-pen-magnifying-glass.png" alt="Robot" className="hero" />
+      </div>
+
       <div className="upload-section">
-  <input
-    type="file"
-    id="fileInput"
-    accept=".pdf,.doc,.docx"
-    onChange={handleFileUpload}
-    style={{ display: 'none' }}
-  />
-  <label htmlFor="fileInput" className="upload-button">
-    📄 Upload Contract for Review
-  </label>
-</div>
+        <input
+          type="file"
+          id="fileInput"
+          accept=".pdf,.doc,.docx"
+          onChange={handleFileUpload}
+          style={{ display: 'none' }}
+        />
+        <label htmlFor="fileInput" className="upload-button">
+          📄 Upload Contract for Review
+        </label>
+      </div>
 
       {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
       <button onClick={handleDownloadDocx} disabled={!analysis || loading}>
         📥 Download Redlines as Word Doc
       </button>
+
       <div style={{ marginTop: '2rem' }}>
         {analysis.split('---').map((section, i) =>
           section.includes('📘') ? (
