@@ -66,8 +66,8 @@ function App() {
       <h1>📄 Contract Review Assistant</h1>
       <p>Upload a contract and let AI suggest redlines that protect your small business.</p>
       <div className="image-stack">
-  <img src="/notepad.png" alt="Notepad" className="notepad-img" />
-  <img src="/robot.png" alt="Robot with tools" className="robot-img" />
+<img src="/notepad.png" alt="Notepad" className="hero-img" />
+<img src="/robot.png" alt="Robot with tools" className="hero-img" />       
 </div>
       <div className="upload-section">
   <input
