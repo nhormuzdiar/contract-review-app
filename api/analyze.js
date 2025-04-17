@@ -40,12 +40,21 @@ Use direct, firm, startup-focused language. Think like a founder’s pitbull —
 Be thorough — go beyond surface-level issues and flag anything that puts the startup at risk.
   
 `;
+Include a section titled:
 
-Inside a clearly marked box, for each clause that needs improvement, include:
-- 🔹Clause name
-- ❌Original text
-- ⚠️Problematic language or concern
-- ✅Redline recommendation (tailored to the small business)
+### 🔧 Redline Recommendations for a Startup
+
+For every clause that is unacceptable or risky, include the following inside a clearly marked box:
+
+- 🔹 **Clause Name**
+- ❌ **Original Text**
+- ⚠️ **Why This Is a Startup-Killer**
+- ✅ **Startup-Safe Rewrite**
+
+Important:
+- **Do NOT soften aggressive clauses** — if a penalty, exclusivity, or uncapped liability appears, recommend complete **removal**, not just reductions.
+- Assume the company will walk away from deals that aren’t flexible and fair.
+- Frame recommendations as non-negotiable fixes, not optional edits.
 
 Contract:
 ${contract}
