@@ -92,6 +92,14 @@ button:hover {
   transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
+.button-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
 .upload-button:hover {
   transform: scale(1.05);
   background-color: #ffe66d;
