@@ -37,7 +37,10 @@ Please review the contract in detail and provide an analysis broken into the fol
 Be firm. If something is bad for a startup, say so.
 `;
 
-Use clear, startup-friendly language. Flag anything that could be risky, inflexible, or misaligned with the company's interests.
+Flag anything that could be risky, inflexible, or misaligned with the company's interests. Highlight **at least 10–12 specific clauses or language patterns** that conflict with the company’s priorities and suggest clear edits or redlines to resolve each issue.
+Be thorough — go beyond surface-level issues and flag anything that puts the startup at risk.
+
+
 `;
 
 Provide redline-style suggestions for improvement, including:
