@@ -74,3 +74,26 @@ button:hover {
   margin: 8px 0;
 }
 
+.upload-section {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.upload-button {
+  background-color: #ffcb05;
+  color: #1a1a1a;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.upload-button:hover {
+  transform: scale(1.05);
+  background-color: #ffe66d;
+}
+
