@@ -2,10 +2,12 @@ export default async function handler(req, res) {
   const { contract } = req.body;
 
   const prompt = `
-You are a contract review expert advising a small startup client. Your goal is to protect the small business by identifying contract terms that favor the vendor or pose risks, and suggesting stronger alternatives.
+You are a contract review expert advising a small startup client. Your goal is to protect the small business by identifying contract terms that favor the vendor or pose risks, and suggesting stronger alternatives that limit client risk, maintain client flexibility, and ensure that client is only paying for value.
 
 Always favor:
 - Shorter termination windows (14–30 days)
+- No termination penalties
+- No exclusivity clauses
 - Faster payment timelines for refunds, longer for payments
 - Jurisdiction favorable to the small business (e.g. NY or remote arbitration)
 - Minimizing penalties, liability, and lock-in
