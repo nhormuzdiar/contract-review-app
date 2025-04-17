@@ -67,36 +67,46 @@ function App() {
 };
 
   return (
-      <div className="hero-container">
-        <img src="/notepad.png" alt="Notepad" className="hero" />
-        <img src="/ChatGPT Image Apr 17, 2025, 02_16_11 PM.png" alt="Robot" className="hero" />
-      </div>
-)
-      {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
+  <div className="container">
+    <h1>📝 Contract Companion</h1>
+    <p>Upload a contract and let your AI companion highlight redlines to protect your small business.</p>
 
-<div className="button-group">
-  <button className="upload-button" onClick={handleUploadClick}>
-    📄 Upload Contract for Review
-  </button>
-
-  <button className="download-button" onClick={handleDownloadDocx} disabled={!analysis || loading}>
-    📨 Download Redlines as Word Doc
-  </button>
-</div>
-
-      <div style={{ marginTop: '2rem' }}>
-        {analysis.split('---').map((section, i) =>
-          section.includes('📘') ? (
-            <div className="card" key={i}>
-              {section.split('\n').map((line, idx) => (
-                <div key={idx}>{line}</div>
-              ))}
-            </div>
-          ) : null
-        )}
-      </div>
+    <div className="hero-container">
+      <img src="/notepad.png" alt="Notepad" className="hero" />
+      <img src="/ChatGPT Image Apr 17, 2025, 02_16_11 PM.png" alt="Robot" className="hero" />
     </div>
-  );
-}
+
+    {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
+
+    <div className="button-group">
+      <input
+        type="file"
+        id="fileInput"
+        accept=".pdf,.doc,.docx"
+        onChange={handleFileUpload}
+        style={{ display: 'none' }}
+      />
+      <button className="upload-button" onClick={handleUploadClick}>
+        📄 Upload Contract for Review
+      </button>
+
+      <button className="download-button" onClick={handleDownloadDocx} disabled={!analysis || loading}>
+        📨 Download Redlines as Word Doc
+      </button>
+    </div>
+
+    <div style={{ marginTop: '2rem' }}>
+      {analysis.split('---').map((section, i) =>
+        section.includes('📘') ? (
+          <div className="card" key={i}>
+            {section.split('\n').map((line, idx) => (
+              <div key={idx}>{line}</div>
+            ))}
+          </div>
+        ) : null
+      )}
+    </div>
+  </div>
+);
 
 export default App;
