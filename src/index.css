@@ -96,4 +96,25 @@ button:hover {
   transform: scale(1.05);
   background-color: #ffe66d;
 }
+.image-stack {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.notepad-img {
+  width: 200px;
+  margin-bottom: 1rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+.robot-img {
+  width: 300px;
+  animation: float 4s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%   { transform: translateY(0px); }
+  50%  { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
 
