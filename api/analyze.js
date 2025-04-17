@@ -21,12 +21,13 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   let additions = "";
 
   // 🚫 Early Termination Penalty
-  if (
-  /termination.*penalty/.test(lowerClause) &&
-  !/delete this clause/.test(lowerOutput)
+if (
+  /termination.*penalty|penalty.*termination/.test(lowerClause) &&
+  !/delete this clause/.test(lowerOutput) &&
+  /50%|fifty percent|penalty|remaining balance|monthly service fee/.test(lowerClause)
 ) {
   additions += `
-⚠️ Override: This clause imposes a termination penalty. Startups should never pay to exit a contract.
+⚠️ Override: This clause imposes a financial penalty for terminating early. Startups should never pay to exit a contract.
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
 `;
 }
@@ -60,8 +61,10 @@ function enforceStartupOverrides(clauseText, gptOutput) {
 ✅ Recommendation: Cap liability to the total fees paid under this agreement.
 `;
   }
-
-  return gptOutput + additions;
+if (additions) {
+  console.log("✅ OVERRIDE TRIGGERED for clause:\n", clauseText);
+}
+  return additions || gptOutput;
 }
 
 // 🔹 3. Your main handler
