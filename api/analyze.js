@@ -22,10 +22,15 @@ function enforceStartupOverrides(clauseText, gptOutput) {
 
   // 🚫 Early Termination Penalty
   if (
-    lowerClause.includes("termination") &&
-    lowerOutput.includes("penalty") &&
-    !lowerOutput.includes("delete this clause")
-  ) {
+  /termination.*penalty/.test(lowerClause) &&
+  !/delete this clause/.test(lowerOutput)
+) {
+  additions += `
+⚠️ Override: This clause imposes a termination penalty. Startups should never pay to exit a contract.
+✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
+`;
+}
+   {
     additions += `
 ⚠️ Override: This clause imposes a termination penalty. Startups should never pay to exit a contract.
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
