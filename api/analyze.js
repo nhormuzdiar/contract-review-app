@@ -41,7 +41,7 @@ Be thorough — go beyond surface-level issues and flag anything that puts the s
   
 `;
 
-Provide redline-style suggestions for improvement, including:
+Inside a clearly marked box, for each clause that needs improvement, include:
 - 🔹Clause name
 - ❌Original text
 - ⚠️Problematic language or concern
