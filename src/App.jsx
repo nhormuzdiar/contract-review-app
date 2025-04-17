@@ -63,7 +63,7 @@ function App() {
 
   return (
     <div className="app-wrapper">
-      <h1>📝 Contract Companion</h1>
+      <h1>📝 </h1>
       <p>Upload a contract and let your AI companion highlight redlines to protect your small business.</p>
 
       <div className="image-stack">
