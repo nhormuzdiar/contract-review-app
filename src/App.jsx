@@ -62,6 +62,10 @@ function App() {
     }
   };
 
+  const handleUploadClick = () => {
+  document.querySelector('input[type="file"]').click();
+};
+
   return (
     <div className="container">
       <h1>📝 Contract Companion</h1>
