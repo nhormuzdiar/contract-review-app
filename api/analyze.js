@@ -1,8 +1,9 @@
 // 🔹 1. At the top of your file
 function splitContractIntoClauses(contractText) {
   return contractText
-    .split(/\n(?=\d{1,2}\.\d{1,2} )/)  // splits at lines like "11.2", "12.1"
-    .filter(clause => clause.trim().length > 0);
+    .split(/\n(?=(\d{1,2}\.|\bARTICLE\b|\bSection\b))/i)  // Matches "11.", "ARTICLE", "Section"
+    .map(clause => clause.trim())
+    .filter(clause => clause.length > 30); // remove empty or meaningless chunks
 }
 function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
