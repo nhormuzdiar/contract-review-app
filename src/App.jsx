@@ -65,7 +65,19 @@ function App() {
     <div className="container">
       <h1>📄 Contract Review Assistant</h1>
       <p>Upload a contract and let AI suggest redlines that protect your small business.</p>
-      <input type="file" onChange={handleFileUpload} accept=".pdf,.docx" />
+      <div className="upload-section">
+  <input
+    type="file"
+    id="fileInput"
+    accept=".pdf,.doc,.docx"
+    onChange={handleFileUpload}
+    style={{ display: 'none' }}
+  />
+  <label htmlFor="fileInput" className="upload-button">
+    📄 Upload Contract for Review
+  </label>
+</div>
+
       {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
       <button onClick={handleDownloadDocx} disabled={!analysis || loading}>
         📥 Download Redlines as Word Doc
