@@ -4,6 +4,51 @@ function splitContractIntoClauses(contractText) {
     .split(/\n(?=\d{1,2}\.\d{1,2} )/)  // splits at lines like "11.2", "12.1"
     .filter(clause => clause.trim().length > 0);
 }
+function enforceStartupOverrides(clauseText, gptOutput) {
+  const lowerClause = clauseText.toLowerCase();
+  const lowerOutput = gptOutput.toLowerCase();
+
+  let additions = "";
+
+  // 🚫 Early Termination Penalty
+  if (
+    lowerClause.includes("termination") &&
+    lowerOutput.includes("penalty") &&
+    !lowerOutput.includes("delete this clause")
+  ) {
+    additions += `
+⚠️ Override: This clause imposes a termination penalty. Startups should never pay to exit a contract.
+✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
+`;
+  }
+
+  // 🚫 Exclusivity or Lock-in
+  if (
+    lowerClause.includes("exclusive") &&
+    !lowerOutput.includes("delete this clause")
+  ) {
+    additions += `
+⚠️ Override: This clause limits your freedom to work with other vendors or providers.
+✅ Recommendation: DELETE THIS CLAUSE or revise it to be non-exclusive.
+`;
+  }
+
+  // 🚫 Uncapped liability
+  if (
+    lowerClause.includes("unlimited") &&
+    lowerClause.includes("liability") &&
+    !lowerOutput.includes("cap") &&
+    !lowerOutput.includes("delete this clause")
+  ) {
+    additions += `
+⚠️ Override: Unlimited liability is too risky for a small business.
+✅ Recommendation: Cap liability to the total fees paid under this agreement.
+`;
+  }
+
+  return gptOutput + additions;
+}
+
 
 // 🔹 2. Your main handler
 export default async function handler(req, res) {
@@ -52,7 +97,9 @@ ${clauseText}
     });
 
     const data = await response.json();
-    return data.choices?.[0]?.message?.content || "";
+    const rawOutput = data.choices?.[0]?.message?.content || "";
+const enforcedOutput = enforceStartupOverrides(clauseText, rawOutput);
+return enforcedOutput;
   });
 
   // 🔹 4. Wait for all clause reviews to complete
