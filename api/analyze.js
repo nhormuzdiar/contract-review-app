@@ -19,25 +19,23 @@ You must:
 
 ---
 
-### 🔍 Analyze the contract in 3 parts:
+Use the following format and tone for each issue:
 
-1. **Summary of Key Terms**
+Example:
 
-2. **🚨 Redline Box: At Least 10 Specific Problems**
-   For **at least 10 individual clauses**, provide:
-   - 🔹 Clause name
-   - ❌ Original text
-   - ⚠️ What’s wrong (from the startup’s point of view)
-   - ✅ Redline recommendation — either **delete** the clause or rewrite it in a startup-safe way.
+🔹 Clause Name: Early Termination Penalty  
+❌ Original: "If the client terminates early, they shall pay a penalty of 50% of the remaining balance."  
+⚠️ Why: This clause punishes the startup for leaving a deal. No small business should ever accept this — it's unfair and risky.  
+✅ Recommendation: **DELETE THIS CLAUSE ENTIRELY.** A startup should never pay to exit a contract. This is a deal-breaker.
+
+---
+
+Now repeat this format for at least 10 redlines based on the uploaded contract.
 
    Important:
    - **Do not suggest compromise** for bad clauses.
    - A penalty clause? ➤ “✅ Recommendation: DELETE this clause entirely.”
    - A vague indemnity clause? ➤ “✅ Recommendation: Cap liability to amount paid, and clarify scope.”
-
-3. **✅ Final Verdict**
-   Use strong language: e.g.  
-   **“This contract is not safe for a startup in its current form.”**
 
 ---
 
