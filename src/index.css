@@ -125,4 +125,60 @@ button:hover {
   50%  { transform: translateY(-10px); }
   100% { transform: translateY(0px); }
 }
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+.image-stack {
+  margin: 1rem 0;
+}
+
+.notepad-img, .robot-img {
+  width: 100px;
+  margin: 0 10px;
+}
+
+.upload-button, .download-button {
+  margin: 10px 0;
+  padding: 12px 24px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+}
+
+.upload-button {
+  background-color: #ffcb05;
+  color: #1a1a1a;
+  box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+}
+
+.upload-button:hover {
+  background-color: #ffe66d;
+}
+
+.download-button {
+  background-color: #ff69b4;
+  color: white;
+}
+
+.download-button:hover {
+  background-color: #e91e63;
+}
+
+.card {
+  background: #7b1fa2;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  max-width: 700px;
+}
 
