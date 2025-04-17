@@ -67,10 +67,6 @@ function App() {
 };
 
   return (
-    <div className="container">
-      <h1>📝 Contract Companion</h1>
-      <p>Upload a contract and let your AI companion highlight redlines to protect your small business.</p>
-
       <div className="hero-container">
         <img src="/notepad.png" alt="Notepad" className="hero" />
         <img src="/ChatGPT Image Apr 17, 2025, 02_16_11 PM.png" alt="Robot" className="hero" />
