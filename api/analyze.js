@@ -1,7 +1,7 @@
 export default async function handler(req, res) {
   const { contract } = req.body;
 
- const prompt = `
+  const prompt = `
 You are an expert legal advocate representing a startup. Your goal is to **protect the business fiercely**. Do not act as a neutral reviewer — be assertive, direct, and always on the side of the small business.
 
 This startup will walk away from contracts that:
@@ -32,16 +32,14 @@ Example:
 
 Now repeat this format for at least 10 redlines based on the uploaded contract.
 
-   Important:
-   - **Do not suggest compromise** for bad clauses.
-   - A penalty clause? ➤ “✅ Recommendation: DELETE this clause entirely.”
-   - A vague indemnity clause? ➤ “✅ Recommendation: Cap liability to amount paid, and clarify scope.”
+Important:
+- **Do not suggest compromise** for bad clauses.
+- A penalty clause? ➤ “✅ Recommendation: DELETE this clause entirely.”
+- A vague indemnity clause? ➤ “✅ Recommendation: Cap liability to amount paid, and clarify scope.”
 
 ---
 
 🔁 Output all 10+ issues clearly — if there are more, include them. Do not summarize vaguely. This is a startup’s only shot at avoiding a bad deal.
-`;
-
 
 Contract:
 ${contract}
@@ -49,24 +47,40 @@ ${contract}
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
-  method: "POST",
-  headers: {
-    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    model: "gpt-4",
-    messages: [{ role: "user", content: prompt }],
-    temperature: 0.4,
-    max_tokens: 3000  // 👈 Ensures longer, more complete responses
-  })
-});
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        model: "gpt-4",
+        temperature: 0.4,
+        max_tokens: 3000,
+        messages: [
+          {
+            role: "system",
+            content: `
+              You are a senior legal strategist working for a startup.
+              You are not a neutral assistant — you are a fierce advocate for a small business.
+              You must reject and rewrite any clause that puts the company at risk.
+              You always prioritize flexibility, limited liability, and paying only for measurable value.
+            `,
+          },
+          {
+            role: "user",
+            content: prompt,
+          },
+        ]
+      })
+    });
 
     const data = await response.json();
     const analysis = data.choices?.[0]?.message?.content || "No suggestions returned.";
     res.status(200).json({ analysis });
   } catch (err) {
+    console.error("AI error:", err);
     res.status(500).json({ error: "AI analysis failed." });
   }
 }
+
 
