@@ -51,17 +51,18 @@ ${contract}
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        model: "gpt-4",
-        messages: [{ role: "user", content: prompt }],
-        temperature: 0.4
-      })
-    });
+  method: "POST",
+  headers: {
+    "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    model: "gpt-4",
+    messages: [{ role: "user", content: prompt }],
+    temperature: 0.4,
+    max_tokens: 3000  // 👈 Ensures longer, more complete responses
+  })
+});
 
     const data = await response.json();
     const analysis = data.choices?.[0]?.message?.content || "No suggestions returned.";
@@ -70,3 +71,4 @@ ${contract}
     res.status(500).json({ error: "AI analysis failed." });
   }
 }
+
