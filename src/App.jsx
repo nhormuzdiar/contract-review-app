@@ -94,7 +94,6 @@ function App() {
         <button className="upload-button" onClick={handleUploadClick}>
           📄 Upload Contract for Review
         </button>
-
         <button className="download-button" onClick={handleDownloadDocx} disabled={!analysis || loading}>
           📨 Download Redlines as Word Doc
         </button>
@@ -115,4 +114,4 @@ function App() {
   );
 }
 
-export default
+export default App;
