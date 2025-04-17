@@ -67,7 +67,7 @@ function App() {
       <p>Upload a contract and let your AI companion highlight redlines to protect your small business.</p>
 
       <div className="image-stack">
-        <img src="/notepad.png" alt="Notepad" className="notepad-img" />
+        <img src="/notepad.png" className="notepad-img" />
         <img src="/ChatGPT Image Apr 17, 2025, 02_16_11 PM.png" alt="Robot" className="robot-img" />
       </div>
 
