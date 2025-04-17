@@ -1,43 +1,49 @@
 export default async function handler(req, res) {
   const { contract } = req.body;
 
-  const prompt = `
-You are a contract reviewer working for a small startup. Your job is to be an **aggressive advocate**, not a neutral party. You must identify and push back against any contract language that puts the company at risk, limits its flexibility, or forces it to pay for things it doesn’t clearly benefit from.
+ const prompt = `
+You are an expert legal advocate representing a startup. Your goal is to **protect the business fiercely**. Do not act as a neutral reviewer — be assertive, direct, and always on the side of the small business.
 
-This startup cannot afford bad deals, and it expects YOU to protect it. Do NOT hedge. Be bold, direct, and decisive.
+This startup will walk away from contracts that:
+- Penalize them for ending an agreement.
+- Restrict their freedom to work with others.
+- Include unclear or uncapped risk.
+- Make them pay for vague, unmeasurable value.
 
----
-
-🛑 Automatically reject clauses that:
-- Impose early termination penalties. These must be removed — no exceptions.
-- Require 30+ days notice to terminate.
-- Include exclusivity or non-competes.
-- Introduce uncapped liability or vague indemnity terms.
-- Have minimum spend, fixed retainers, or auto-renewal traps.
-
-✅ The company requires:
-- Termination with 30 days or less, no penalties.
-- Clear, capped liability (ideally limited to fees paid).
-- Freedom to engage with other vendors.
-- Only paying for measurable value.
+You must:
+- Recommend **full deletion** of early termination penalties.
+- Flag all lock-in terms (auto-renewals, exclusivity, etc.)
+- Reject uncapped or vague indemnity/liability language.
+- Require termination within 30 days or less.
+- Reject minimum spend or fixed retainers unless **clearly justified**.
 
 ---
 
-### Format your analysis in 3 parts:
+### 🔍 Analyze the contract in 3 parts:
 
-1. 🔍 **Summary of Key Terms**
-   - Summarize the structure and major obligations.
-2. 🚨 **Red Flags (at least 10 issues)**
-   - Identify **at least 10 specific clauses or lines** that violate the startup’s values.
-   - Use 🔹 **Clause Name**, ❌ **Original**, ⚠️ **Why It’s a Problem**, ✅ **Startup-Friendly Rewrite**
-   - If the clause should be deleted entirely, say so directly.
-3. ✅ **Final Verdict**
-   - Is this contract startup-safe? Use bold language. If it’s a bad deal, say: **This contract is not startup-safe. Do not sign until all major risks are removed.**
+1. **Summary of Key Terms**
 
-DO NOT stop at 3–5 suggestions. Find **at least 10**. If there are more problems, include them all.
+2. **🚨 Redline Box: At Least 10 Specific Problems**
+   For **at least 10 individual clauses**, provide:
+   - 🔹 Clause name
+   - ❌ Original text
+   - ⚠️ What’s wrong (from the startup’s point of view)
+   - ✅ Redline recommendation — either **delete** the clause or rewrite it in a startup-safe way.
 
-  
+   Important:
+   - **Do not suggest compromise** for bad clauses.
+   - A penalty clause? ➤ “✅ Recommendation: DELETE this clause entirely.”
+   - A vague indemnity clause? ➤ “✅ Recommendation: Cap liability to amount paid, and clarify scope.”
+
+3. **✅ Final Verdict**
+   Use strong language: e.g.  
+   **“This contract is not safe for a startup in its current form.”**
+
+---
+
+🔁 Output all 10+ issues clearly — if there are more, include them. Do not summarize vaguely. This is a startup’s only shot at avoiding a bad deal.
 `;
+
 
 Contract:
 ${contract}
