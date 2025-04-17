@@ -71,7 +71,7 @@ function App() {
         <img src="/notepad.png" alt="Notepad" className="hero" />
         <img src="/ChatGPT Image Apr 17, 2025, 02_16_11 PM.png" alt="Robot" className="hero" />
       </div>
-
+)
       {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
 
 <div className="button-group">
