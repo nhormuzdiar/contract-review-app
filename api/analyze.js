@@ -44,17 +44,21 @@ Include a section titled:
 
 ### 🔧 Redline Recommendations for a Startup
 
-For every clause that is unacceptable or risky, include the following inside a clearly marked box:
+For every clause that violates the company's core principles, include:
 
 - 🔹 **Clause Name**
 - ❌ **Original Text**
-- ⚠️ **Why This Is a Startup-Killer**
-- ✅ **Startup-Safe Rewrite**
+- ⚠️ **Why This Is a Serious Risk**
+- ✅ **Redline Suggestion**
 
-Important:
-- **Do NOT soften aggressive clauses** — if a penalty, exclusivity, or uncapped liability appears, recommend complete **removal**, not just reductions.
-- Assume the company will walk away from deals that aren’t flexible and fair.
-- Frame recommendations as non-negotiable fixes, not optional edits.
+Rules:
+- You must NOT reduce harmful clauses. If a clause is predatory, the redline **must recommend complete removal**.
+- If you encounter any **early termination penalty**, your only acceptable redline is:  
+  > “This clause should be removed entirely. No startup should pay a penalty to end a contract.”
+- Do not soften your language — you are an advocate, not a neutral reviewer.
+- Assume the company will walk away from any contract that includes these risks.
+
+Use bold, startup-first language. Push back aggressively on any clause that would harm a small, fast-moving business.  Remove clauses in their entirety if they are determental to the interests of the company.
 
 Contract:
 ${contract}
