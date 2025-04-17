@@ -76,19 +76,6 @@ function App() {
         <img src="/ChatGPT Image Apr 17, 2025, 02_16_11 PM.png" alt="Robot" className="hero" />
       </div>
 
-      <div className="upload-section">
-        <input
-          type="file"
-          id="fileInput"
-          accept=".pdf,.doc,.docx"
-          onChange={handleFileUpload}
-          style={{ display: 'none' }}
-        />
-        <label htmlFor="fileInput" className="upload-button">
-          📄 Upload Contract for Review
-        </label>
-      </div>
-
       {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
 
 <div className="button-group">
