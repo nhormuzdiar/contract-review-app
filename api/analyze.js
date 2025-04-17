@@ -1,10 +1,19 @@
-// 🔹 1. At the top of your file
+// 🔹 1. Smarter clause splitter with fallback support
 function splitContractIntoClauses(contractText) {
-  return contractText
-    .split(/\n(?=(\d{1,2}\.|\bARTICLE\b|\bSection\b))/i)  // Matches "11.", "ARTICLE", "Section"
+  // Try splitting by standard legal structure first
+  let clauses = contractText.split(/\n(?=(\d{1,2}\.|\bARTICLE\b|\bSection\b))/i);
+
+  // Fallback: if too few, split by double newlines (paragraph-style)
+  if (clauses.length < 8) {
+    clauses = contractText.split(/\n{2,}/); // paragraph-based splitting
+  }
+
+  return clauses
     .map(clause => clause.trim())
-    .filter(clause => clause.length > 30); // remove empty or meaningless chunks
+    .filter(clause => clause.length > 30); // remove short junk clauses
 }
+
+// 🔹 2. Redline override logic to enforce small-business standards
 function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
   const lowerOutput = gptOutput.toLowerCase();
@@ -50,14 +59,21 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   return gptOutput + additions;
 }
 
-
-// 🔹 2. Your main handler
+// 🔹 3. Your main handler
 export default async function handler(req, res) {
   const { contract } = req.body;
 
-  const clauses = splitContractIntoClauses(contract);
+  let clauses = splitContractIntoClauses(contract);
 
-  // 🔹 3. GPT prompt for each clause
+  // 🔧 Ensure at least 10 chunks to analyze
+  if (clauses.length < 10) {
+    const fallbackChunks = contract.match(/.{300,600}[\s.]/g) || [];
+    clauses = clauses.concat(fallbackChunks.slice(0, 10 - clauses.length));
+  }
+
+  console.log("📄 Clauses sent for review:", clauses.length);
+
+  // 🔹 4. GPT prompt for each clause
   const clauseAnalysisPromises = clauses.map(async (clauseText) => {
     const prompt = `
 You are reviewing this clause for a small business.
@@ -99,18 +115,16 @@ ${clauseText}
 
     const data = await response.json();
     const rawOutput = data.choices?.[0]?.message?.content || "";
-const enforcedOutput = enforceStartupOverrides(clauseText, rawOutput);
-return enforcedOutput;
+    const enforcedOutput = enforceStartupOverrides(clauseText, rawOutput);
+    return enforcedOutput;
   });
 
-  // 🔹 4. Wait for all clause reviews to complete
+  // 🔹 5. Wait for all clause reviews to complete
   const clauseAnalyses = await Promise.all(clauseAnalysisPromises);
 
-  // 🔹 5. Join them together into one response
+  // 🔹 6. Combine all redlines into a single response
   const finalAnalysis = clauseAnalyses.join("\n\n");
 
-  // 🔹 6. Return the full redline result
+  // 🔹 7. Return the full redline result
   res.status(200).json({ analysis: finalAnalysis });
 }
-
-
