@@ -86,9 +86,16 @@ function App() {
       </div>
 
       {loading && <p className="spinner">🔄 Analyzing your contract…</p>}
-      <button onClick={handleDownloadDocx} disabled={!analysis || loading}>
-        📥 Download Redlines as Word Doc
-      </button>
+
+<div className="button-group">
+  <button className="upload-button" onClick={handleUploadClick}>
+    📄 Upload Contract for Review
+  </button>
+
+  <button className="download-button" onClick={handleDownloadDocx} disabled={!analysis || loading}>
+    📨 Download Redlines as Word Doc
+  </button>
+</div>
 
       <div style={{ marginTop: '2rem' }}>
         {analysis.split('---').map((section, i) =>
