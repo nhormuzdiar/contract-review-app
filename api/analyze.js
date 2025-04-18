@@ -11,17 +11,38 @@ function splitContractIntoClauses(contractText) {
 function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
   const lowerOutput = gptOutput.toLowerCase();
-  let additions = "";
 
-  if (
-  lowerClause.includes("penalty") &&
-  (lowerClause.includes("termination") || lowerClause.includes("early termination")) &&
-  !lowerOutput.includes("delete this clause")
-) {
-  additions += `
-⚠️ Override: This clause imposes a financial penalty for terminating early. Startups should never pay to exit a contract.
+  let overrideTriggered = false;
+  let newOutput = gptOutput;
+
+  // 🚫 FORCE DELETE for early termination penalties
+  const isPenaltyClause =
+    lowerClause.includes("termination") &&
+    lowerClause.includes("penalty");
+
+  const gptDidNotDelete = !lowerOutput.includes("delete this clause");
+
+  const gptTriedToCompromise = lowerOutput.includes("reduce") ||
+    lowerOutput.includes("25%") ||
+    lowerOutput.includes("less") ||
+    lowerOutput.includes("negotiate");
+
+  if (isPenaltyClause && (gptDidNotDelete || gptTriedToCompromise)) {
+    overrideTriggered = true;
+    newOutput = `
+🔹 Clause Title: Early Termination Penalty  
+❌ Original: "${clauseText.trim()}"  
+⚠️ Why It's Bad: This clause imposes a financial penalty on the startup for exiting early. Startups should never pay to leave a bad contract.  
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
 `;
+  }
+
+  // Add log
+  if (overrideTriggered) {
+    console.log("✅ FORCED OVERRIDE triggered for clause:\n", clauseText);
+  }
+
+  return newOutput;
 }
 
   if (
