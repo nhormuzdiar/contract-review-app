@@ -1,50 +1,36 @@
+// 🔹 1. Smarter clause splitter with fallback support
 function splitContractIntoClauses(contractText) {
   let clauses = contractText.split(/\n(?=(\d{1,2}\.|\bARTICLE\b|\bSection\b))/i);
+
   if (clauses.length < 8) {
-    clauses = contractText.split(/\n{2,}/);
+    clauses = contractText.split(/\n{2,}/); // fallback by paragraph
   }
+
   return clauses
     .map(clause => clause.trim())
-    .filter(clause => clause.length > 30);
+    .filter(clause => clause.length > 30); // filter out junk
 }
 
+// 🔹 2. Redline override logic to enforce small-business standards
 function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
   const lowerOutput = gptOutput.toLowerCase();
 
-  let overrideTriggered = false;
-  let newOutput = gptOutput;
+  let additions = "";
 
-  // 🚫 FORCE DELETE for early termination penalties
-  const isPenaltyClause =
-    lowerClause.includes("termination") &&
-    lowerClause.includes("penalty");
-
-  const gptDidNotDelete = !lowerOutput.includes("delete this clause");
-
-  const gptTriedToCompromise = lowerOutput.includes("reduce") ||
-    lowerOutput.includes("25%") ||
-    lowerOutput.includes("less") ||
-    lowerOutput.includes("negotiate");
-
-  if (isPenaltyClause && (gptDidNotDelete || gptTriedToCompromise)) {
-    overrideTriggered = true;
-    newOutput = `
-🔹 Clause Title: Early Termination Penalty  
-❌ Original: "${clauseText.trim()}"  
-⚠️ Why It's Bad: This clause imposes a financial penalty on the startup for exiting early. Startups should never pay to leave a bad contract.  
+  // 🚫 Early Termination Penalty
+  if (
+    /termination.*penalty|penalty.*termination/.test(lowerClause) &&
+    !/delete this clause/.test(lowerOutput) &&
+    /50%|fifty percent|penalty|remaining balance|monthly service fee/.test(lowerClause)
+  ) {
+    additions += `
+⚠️ Override: This clause imposes a financial penalty for terminating early. Startups should never pay to exit a contract.
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
 `;
   }
 
-  // Add log
-  if (overrideTriggered) {
-    console.log("✅ FORCED OVERRIDE triggered for clause:\n", clauseText);
-  }
-
-  return newOutput;
-}
-
+  // 🚫 Exclusivity or Lock-in
   if (
     lowerClause.includes("exclusive") &&
     !lowerOutput.includes("delete this clause")
@@ -55,6 +41,7 @@ function enforceStartupOverrides(clauseText, gptOutput) {
 `;
   }
 
+  // 🚫 Uncapped liability
   if (
     lowerClause.includes("unlimited") &&
     lowerClause.includes("liability") &&
@@ -74,10 +61,13 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   return additions || gptOutput;
 }
 
+// 🔹 3. Your main handler
 export default async function handler(req, res) {
   const { contract } = req.body;
+
   let clauses = splitContractIntoClauses(contract);
 
+  // 🔧 Ensure at least 10 chunks
   if (clauses.length < 10) {
     const fallbackChunks = contract.match(/.{300,600}[\s.]/g) || [];
     clauses = clauses.concat(fallbackChunks.slice(0, 10 - clauses.length));
@@ -142,7 +132,13 @@ ${clauseText}
     }
   });
 
+  // 🔹 5. Combine results (with catch)
   try {
     const clauseAnalyses = await Promise.all(clauseAnalysisPromises);
     const finalAnalysis = clauseAnalyses.join("\n\n");
-    res.status
+    res.status(200).json({ analysis: finalAnalysis });
+  } catch (err) {
+    console.error("❌ Final clause analysis failed:", err);
+    res.status(500).json({ error: "AI analysis failed." });
+  }
+}
