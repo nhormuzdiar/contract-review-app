@@ -16,43 +16,52 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
   const lowerOutput = gptOutput.toLowerCase();
 
-  let additions = "";
+  let enforcedOutput = gptOutput;
 
-  // 🚫 Early Termination Penalty
+  // 🚫 EARLY TERMINATION PENALTIES
   if (
-    /termination.*penalty|penalty.*termination/.test(lowerClause) &&
-    !/delete this clause/.test(lowerOutput) &&
-    /50%|fifty percent|penalty|remaining balance|monthly service fee/.test(lowerClause)
+    lowerClause.includes("penalty") &&
+    (lowerClause.includes("termination") || lowerClause.includes("early termination"))
   ) {
-    additions += `
-⚠️ Override: This clause imposes a financial penalty for terminating early. Startups should never pay to exit a contract.
+    console.log("🚫 FORCING DELETION of penalty clause");
+    enforcedOutput = `
+🔹 Clause Title: Early Termination Penalty  
+❌ Original: "${clauseText.trim()}"  
+⚠️ Why It's Bad: This clause imposes a financial penalty on the startup for exiting early. Startups should never pay to leave a bad deal.  
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
 `;
   }
 
-  // 🚫 Exclusivity or Lock-in
-  if (
-    lowerClause.includes("exclusive") &&
-    !lowerOutput.includes("delete this clause")
+  // 🚫 EXCLUSIVITY / LOCK-IN
+  else if (
+    lowerClause.includes("exclusive") ||
+    lowerClause.includes("exclusivity")
   ) {
-    additions += `
-⚠️ Override: This clause limits your freedom to work with other vendors or providers.
-✅ Recommendation: DELETE THIS CLAUSE or revise it to be non-exclusive.
+    console.log("🚫 FORCING DELETION of exclusivity clause");
+    enforcedOutput = `
+🔹 Clause Title: Exclusivity  
+❌ Original: "${clauseText.trim()}"  
+⚠️ Why It's Bad: This clause limits the startup's ability to work with other clients or vendors.  
+✅ Recommendation: DELETE THIS CLAUSE or clearly limit its scope to specific, short-term projects.
 `;
   }
 
-  // 🚫 Uncapped liability
-  if (
+  // 🚫 UNLIMITED LIABILITY
+  else if (
     lowerClause.includes("unlimited") &&
-    lowerClause.includes("liability") &&
-    !lowerOutput.includes("cap") &&
-    !lowerOutput.includes("delete this clause")
+    lowerClause.includes("liability")
   ) {
-    additions += `
-⚠️ Override: Unlimited liability is too risky for a small business.
-✅ Recommendation: Cap liability to the total fees paid under this agreement.
+    console.log("🚫 FORCING CAP on liability clause");
+    enforcedOutput = `
+🔹 Clause Title: Liability  
+❌ Original: "${clauseText.trim()}"  
+⚠️ Why It's Bad: Unlimited liability is unfair and dangerous for a startup.  
+✅ Recommendation: Cap liability to the total fees paid under this agreement, and clearly limit scope.
 `;
   }
+
+  return enforcedOutput;
+}
 
   if (additions) {
     console.log("✅ OVERRIDE TRIGGERED for clause:\n", clauseText);
