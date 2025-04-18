@@ -14,15 +14,15 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   let additions = "";
 
   if (
-    /termination.*penalty|penalty.*termination/.test(lowerClause) &&
-    !/delete this clause/.test(lowerOutput) &&
-    /50%|fifty percent|penalty|remaining balance|monthly service fee/.test(lowerClause)
-  ) {
-    additions += `
+  lowerClause.includes("penalty") &&
+  (lowerClause.includes("termination") || lowerClause.includes("early termination")) &&
+  !lowerOutput.includes("delete this clause")
+) {
+  additions += `
 ⚠️ Override: This clause imposes a financial penalty for terminating early. Startups should never pay to exit a contract.
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
 `;
-  }
+}
 
   if (
     lowerClause.includes("exclusive") &&
