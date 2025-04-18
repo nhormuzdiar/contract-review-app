@@ -63,14 +63,13 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   }
 
   if (
-    lowerClause.includes("termination") &&
-    (
-      lowerClause.includes("material breach") ||
-      lowerClause.includes("for cause") ||
-      lowerClause.includes("violation") ||
-      lowerClause.includes("failure to perform")
-    )
-  ) {
+  lowerClause.includes("penalty") ||
+  lowerClause.includes("liquidated damages") ||
+  lowerClause.includes("termination charge") ||
+  lowerClause.includes("shall pay") ||
+  lowerClause.includes("early termination")
+)
+ {
     console.log("🚨 FORCED REWRITE: Termination Without Cause");
     return `
 🔹 Clause Title: Termination Conditions  
