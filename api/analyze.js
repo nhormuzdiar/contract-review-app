@@ -16,51 +16,52 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
   const lowerOutput = gptOutput.toLowerCase();
 
-  let enforcedOutput = gptOutput;
+  const original = clauseText.trim();
 
-  // 🚫 EARLY TERMINATION PENALTIES
+  // 🚫 FORCE DELETE: Termination Penalties
   if (
-    lowerClause.includes("penalty") &&
-    (lowerClause.includes("termination") || lowerClause.includes("early termination"))
+    lowerClause.includes("termination") &&
+    lowerClause.includes("penalty")
   ) {
-    console.log("🚫 FORCING DELETION of penalty clause");
-    enforcedOutput = `
+    console.log("🚨 FORCED DELETE: Termination Penalty");
+    return `
 🔹 Clause Title: Early Termination Penalty  
-❌ Original: "${clauseText.trim()}"  
-⚠️ Why It's Bad: This clause imposes a financial penalty on the startup for exiting early. Startups should never pay to leave a bad deal.  
+❌ Original: "${original}"  
+⚠️ Why It's Bad: This clause punishes the startup for exiting a bad deal.  
 ✅ Recommendation: DELETE THIS CLAUSE ENTIRELY.
 `;
   }
 
-  // 🚫 EXCLUSIVITY / LOCK-IN
-  else if (
+  // 🚫 FORCE DELETE or LIMIT: Exclusivity
+  if (
     lowerClause.includes("exclusive") ||
     lowerClause.includes("exclusivity")
   ) {
-    console.log("🚫 FORCING DELETION of exclusivity clause");
-    enforcedOutput = `
+    console.log("🚨 FORCED DELETE: Exclusivity");
+    return `
 🔹 Clause Title: Exclusivity  
-❌ Original: "${clauseText.trim()}"  
-⚠️ Why It's Bad: This clause limits the startup's ability to work with other clients or vendors.  
-✅ Recommendation: DELETE THIS CLAUSE or clearly limit its scope to specific, short-term projects.
+❌ Original: "${original}"  
+⚠️ Why It's Bad: This clause locks the startup into one relationship and limits future opportunities.  
+✅ Recommendation: DELETE THIS CLAUSE or strictly limit it to a short, project-specific scope.
 `;
   }
 
-  // 🚫 UNLIMITED LIABILITY
-  else if (
+  // 🚫 FORCE CAP: Unlimited Liability
+  if (
     lowerClause.includes("unlimited") &&
     lowerClause.includes("liability")
   ) {
-    console.log("🚫 FORCING CAP on liability clause");
-    enforcedOutput = `
+    console.log("🚨 FORCED CAP: Liability");
+    return `
 🔹 Clause Title: Liability  
-❌ Original: "${clauseText.trim()}"  
-⚠️ Why It's Bad: Unlimited liability is unfair and dangerous for a startup.  
-✅ Recommendation: Cap liability to the total fees paid under this agreement, and clearly limit scope.
+❌ Original: "${original}"  
+⚠️ Why It's Bad: Unlimited liability is too risky for a small business.  
+✅ Recommendation: Cap liability to the amount paid and clearly define the limits.
 `;
   }
 
-  return enforcedOutput;
+  // ✅ No override needed
+  return gptOutput;
 }
 
   if (additions) {
