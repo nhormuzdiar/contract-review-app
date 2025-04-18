@@ -52,6 +52,27 @@ function enforceStartupOverrides(clauseText, gptOutput) {
     lowerClause.includes("liability")
   ) {
     console.log("🚨 FORCED CAP: Liability");
+    // 🚫 FORCE REWRITE: Termination should be allowed with or without cause
+if (
+  lowerClause.includes("termination") &&
+  (
+    lowerClause.includes("material breach") ||
+    lowerClause.includes("for cause") ||
+    lowerClause.includes("only if") ||
+    lowerClause.includes("failure to perform") ||
+    lowerClause.includes("violation of this agreement")
+  )
+) {
+  console.log("🚨 FORCED REWRITE: Termination clause requires breach — not acceptable");
+
+  return `
+🔹 Clause Title: Termination Conditions  
+❌ Original: "${original}"  
+⚠️ Why It's Bad: This clause only permits termination if one party violates the agreement. A startup must retain the right to exit an agreement at any time, for any reason.  
+✅ Recommendation: Allow either party to terminate at will, with 30 days’ written notice, regardless of breach.
+`;
+}
+
     return `
 🔹 Clause Title: Liability  
 ❌ Original: "${original}"  
