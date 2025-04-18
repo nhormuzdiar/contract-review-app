@@ -1,24 +1,18 @@
-// 🔹 1. Smarter clause splitter with fallback support
 function splitContractIntoClauses(contractText) {
   let clauses = contractText.split(/\n(?=(\d{1,2}\.|\bARTICLE\b|\bSection\b))/i);
-
   if (clauses.length < 8) {
-    clauses = contractText.split(/\n{2,}/); // fallback by paragraph
+    clauses = contractText.split(/\n{2,}/);
   }
-
   return clauses
     .map(clause => clause.trim())
-    .filter(clause => clause.length > 30); // filter out junk
+    .filter(clause => clause.length > 30);
 }
 
-// 🔹 2. Redline override logic to enforce small-business standards
 function enforceStartupOverrides(clauseText, gptOutput) {
   const lowerClause = clauseText.toLowerCase();
   const lowerOutput = gptOutput.toLowerCase();
-
   let additions = "";
 
-  // 🚫 Early Termination Penalty
   if (
     /termination.*penalty|penalty.*termination/.test(lowerClause) &&
     !/delete this clause/.test(lowerOutput) &&
@@ -30,7 +24,6 @@ function enforceStartupOverrides(clauseText, gptOutput) {
 `;
   }
 
-  // 🚫 Exclusivity or Lock-in
   if (
     lowerClause.includes("exclusive") &&
     !lowerOutput.includes("delete this clause")
@@ -41,7 +34,6 @@ function enforceStartupOverrides(clauseText, gptOutput) {
 `;
   }
 
-  // 🚫 Uncapped liability
   if (
     lowerClause.includes("unlimited") &&
     lowerClause.includes("liability") &&
@@ -61,13 +53,10 @@ function enforceStartupOverrides(clauseText, gptOutput) {
   return additions || gptOutput;
 }
 
-// 🔹 3. Your main handler
 export default async function handler(req, res) {
   const { contract } = req.body;
-
   let clauses = splitContractIntoClauses(contract);
 
-  // 🔧 Ensure at least 10 chunks
   if (clauses.length < 10) {
     const fallbackChunks = contract.match(/.{300,600}[\s.]/g) || [];
     clauses = clauses.concat(fallbackChunks.slice(0, 10 - clauses.length));
@@ -132,13 +121,7 @@ ${clauseText}
     }
   });
 
-  // 🔹 5. Combine results (with catch)
   try {
     const clauseAnalyses = await Promise.all(clauseAnalysisPromises);
     const finalAnalysis = clauseAnalyses.join("\n\n");
-    res.status(200).json({ analysis: finalAnalysis });
-  } catch (err) {
-    console.error("❌ Final clause analysis failed:", err);
-    res.status(500).json({ error: "AI analysis failed." });
-  }
-}
+    res.status
